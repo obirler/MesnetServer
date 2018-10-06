@@ -1,5 +1,5 @@
-## Mesnet Logger
-Mesnet Logger is a logging service for Mesnet program families. The server will be used as crash reporter, gathering statistical data, gathering telemetry data and control panel for Mesnet and its derivatives (MesnetMD and possibly Mesnet3D) in the future.
+## Mesnet Server
+Mesnet Server is a logging service for Mesnet program families. The server will be used as crash reporter, gathering statistical data, gathering telemetry data and control panel for Mesnet and its derivatives (MesnetMD and possibly Mesnet3D) in the future.
 
 The logger service will be used in the future in the applications below:
 
