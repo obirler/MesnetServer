@@ -11,6 +11,18 @@ The logger service will be used in the future in the applications below:
 
 The web service was written in Python Programming Language and developed by [Yusuf TEMİZ](https://bitbucket.org/mytemiz/) and [Ömer BİRLER](https://bitbucket.org/omerbirler/).
 
-![Screen Shot 04-11-18 at 11.14 PM.PNG](https://bitbucket.org/repo/Bgd6yby/images/4219871403-Screen%20Shot%2004-11-18%20at%2011.14%20PM.PNG)
-
-![Screen Shot 04-11-18 at 11.00 PM.PNG](https://bitbucket.org/repo/Bgd6yby/images/1076819568-Screen%20Shot%2004-11-18%20at%2011.00%20PM.PNG)
+![1.PNG](https://bitbucket.org/repo/badXxxy/images/2071556248-1.PNG)
+![2.PNG](https://bitbucket.org/repo/badXxxy/images/3402557434-2.PNG)
+![3.PNG](https://bitbucket.org/repo/badXxxy/images/2900477413-3.PNG)
+![4.PNG](https://bitbucket.org/repo/badXxxy/images/1012128532-4.PNG)
+![5.PNG](https://bitbucket.org/repo/badXxxy/images/331594969-5.PNG)
+![6.PNG](https://bitbucket.org/repo/badXxxy/images/3328745113-6.PNG)
+![7.PNG](https://bitbucket.org/repo/badXxxy/images/1874736618-7.PNG)
+![8.PNG](https://bitbucket.org/repo/badXxxy/images/3316584127-8.PNG)
+![9.PNG](https://bitbucket.org/repo/badXxxy/images/2850048259-9.PNG)
+![10.PNG](https://bitbucket.org/repo/badXxxy/images/1049595248-10.PNG)
+![11.PNG](https://bitbucket.org/repo/badXxxy/images/1235715541-11.PNG)
+![12.PNG](https://bitbucket.org/repo/badXxxy/images/2268006115-12.PNG)
+![13.PNG](https://bitbucket.org/repo/badXxxy/images/1366869124-13.PNG)
+![14.PNG](https://bitbucket.org/repo/badXxxy/images/4107455437-14.PNG)
+![15.PNG](https://bitbucket.org/repo/badXxxy/images/1646762611-15.PNG)
