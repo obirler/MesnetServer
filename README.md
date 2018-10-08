@@ -3,11 +3,11 @@ Mesnet Server is a logging service for Mesnet program families. The server will 
 
 The logger service will be used in the future in the applications below:
 
-**Mesnet**: Two-dimensional frame analyzer program that uses Moment Distibution Method. It is in beta version now and it is open-sourced. It is already in use by students in ITU.
+**Mesnet**: Two-dimensional frame analyzer program that uses Moment Distibution Method. It is in beta version now and open-sourced. It is already in use by students and lecturers in ITU.
 
-**MesnetMD**: Two-dimensional frame analyzer program that uses Matrix Dispalacement Method (a kind of Finite Element Method). The program is in development stage and has no release version.
+**MesnetMD**: Two-dimensional frame analyzer program that uses Matrix Displacement Method (a kind of Finite Element Method). The program is in development stage and has no release version yet.
 
-**Mesnet3D**: A prospective Three-dimensional analyzer program that is also supposed to use Matrix Dispalacement Method but in three dimensional space. It is in concept design stage.
+**Mesnet3D**: A prospective Three-dimensional analyzer program that is also supposed to use Matrix Displacement Method but in three dimensional space. It is in concept design stage.
 
 The web service was written in Python Programming Language and developed by [Yusuf TEMİZ](https://bitbucket.org/mytemiz/) and [Ömer BİRLER](https://bitbucket.org/omerbirler/).
 
