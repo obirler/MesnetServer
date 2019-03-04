@@ -1,3 +1,4 @@
+from builtins import Exception, repr, str, int
 import dbhelper
 import time
 import os
@@ -7,6 +8,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from Settings import Settings, Setting
+from DownloadCounter import DownloadCounter
 import config
 from FileView import FileView
 
@@ -26,7 +28,6 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(30), unique=True)
     password = db.Column(db.String(30))
 
-
 @app.route("/")
 def index():
     registeradmin()
@@ -35,13 +36,25 @@ def index():
         os.mkdir(target)
     return render_template("welcome.html")
 
-
+@app.route('/downloads', methods=['GET'])
+def list_downloads():
+    target = os.path.join(APP_ROOT, 'files/')
+    files = []
+    for filename in os.listdir(target):
+        path = os.path.join(target, filename)
+        if os.path.isfile(path):
+            fileview = FileView(path)
+            files.append(fileview)
+    return render_template('downloads.html', files=files)
 
 @app.route('/files/<path:filename>', methods=['GET'])
 def download(filename):
     target = os.path.join(APP_ROOT, 'files/')
+    print('Downloading ' + target + filename)
+    conn, cur = dbhelper.getDb()
+    downloaddb = DownloadCounter(conn, cur)
+    downloaddb.Increment(filename)
     return send_from_directory(directory=target, filename=filename)
-
 
 @app.route('/files', methods=['POST', 'GET', 'DELETE', 'PATCH'])
 @login_required
@@ -104,7 +117,6 @@ def list_files():
             print('File Rename Error: ' + repr(ex))
             return "failed"
 
-
 @app.route('/files/rename', methods=['POST'])
 @login_required
 def rename():
@@ -118,7 +130,6 @@ def rename():
     os.rename(oldpath, newpath)
     return "success"
 
-
 @app.route('/files/delete', methods=['POST'])
 @login_required
 def delete_file():
@@ -128,7 +139,6 @@ def delete_file():
     print('filepath=' + str(filepath))
     os.remove(filepath)
     return "success"
-
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -148,14 +158,12 @@ def login():
     elif request.method == 'GET':
         return render_template("login.html")
 
-
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     session.pop('user', None)
     return render_template("welcome.html")
-
 
 def registeradmin():
     if not os.path.exists(app.config['SQLALCHEMY_DATABASE_URI']):
@@ -168,11 +176,9 @@ def registeradmin():
             db.session.add(admin)
             db.session.commit()
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
 
 @app.route('/logs')
 @login_required
@@ -184,7 +190,6 @@ def logs_home():
         return render_template('logs.html', logs=logs)
     else:
         return render_template('error.html', exception=err)
-
 
 @app.route('/log/<int:log_id>', methods=['GET'])
 def api_log_from_id(log_id):
@@ -198,8 +203,8 @@ def api_log_from_id(log_id):
         print('Error in getting log!')
         return err
 
-
 @app.route('/log/all')
+@login_required
 def api_log_all():
     conn, cur = dbhelper.getDb()
     logdb = LogDb(conn, cur)
@@ -207,55 +212,56 @@ def api_log_all():
     logsdicts = [x.toDict() for x in logs]
     return json.dumps(logsdicts)
 
-
-@app.route('/log', methods=['POST', 'DEL'])
+@app.route('/log', methods=['POST'])
 def api_log():
-    if request.method == 'POST':
-        try:
-            conn, cur = dbhelper.getDb()
-            username = request.form['username']
-            appname = request.form['appname']
-            version = request.form['version']
-            type = request.form['type']
-            createdate = request.form['createdate']
-            content = request.form['content']
-            senddate = time.strftime('%d.%m.%Y %H:%M:%S', time.localtime())
-            logdb = LogDb(conn, cur)
-            log = Log(username, appname, version, type, createdate, senddate, content)
-            err = logdb.addLog(log)
-            print('username = ' + username)
-            print('appname = ' + appname)
-            print('version = ' + version)
-            print('type = ' + type)
-            print('createdate = ' + createdate)
-            print('content = ' + content)
-            print('senddate = ' + senddate)
-            return str(err)
-        except Exception as ex:
-            print(ex)
-            return repr(ex)
-    elif request.method == 'DEL':
-        print('Delete entry')
-        print(request.form)
-        # concat json var with '[]' for calling array getted with request
-        idlist = request.form.getlist('ids[]')
-        print('IDS: ', idlist)
-        if idlist == []:
-            try:
-                idlist = [request.form['id']]
-                print('IDS: ', idlist)
-            except:
-                return json.dumps({'status': 'OK', 'idlist': idlist})
-
-        print('IDS: ', idlist)
-        print(json.dumps({'status': 'OK', 'idlist': idlist}))
+    try:
         conn, cur = dbhelper.getDb()
+        username = request.form['username']
+        appname = request.form['appname']
+        version = request.form['version']
+        type = request.form['type']
+        createdate = request.form['createdate']
+        content = request.form['content']
+        senddate = time.strftime('%d.%m.%Y %H:%M:%S', time.localtime())
         logdb = LogDb(conn, cur)
-        for _id in idlist:
-            print(_id)
-            err = logdb.deleteLog(_id)
-            print(err)
-        return json.dumps({'status': 'OK', 'idlist': idlist})
+        log = Log(username, appname, version, type, createdate, senddate, content)
+        err = logdb.addLog(log)
+        print('username = ' + username)
+        print('appname = ' + appname)
+        print('version = ' + version)
+        print('type = ' + type)
+        print('createdate = ' + createdate)
+        print('content = ' + content)
+        print('senddate = ' + senddate)
+        return str(err)
+    except Exception as ex:
+        print(ex)
+        return repr(ex)
+
+@app.route('/log/delete',  methods=['POST'])
+@login_required
+def delete_log():
+    print('Delete entry')
+    print(request.form)
+    # concat json var with '[]' for calling array getted with request
+    idlist = request.form.getlist('ids[]')
+    print('IDS: ', idlist)
+    if idlist == []:
+        try:
+            idlist = [request.form['id']]
+            print('IDS: ', idlist)
+        except:
+            return json.dumps({'status': 'OK', 'idlist': idlist})
+
+    print('IDS: ', idlist)
+    print(json.dumps({'status': 'OK', 'idlist': idlist}))
+    conn, cur = dbhelper.getDb()
+    logdb = LogDb(conn, cur)
+    for _id in idlist:
+        print(_id)
+        err = logdb.deleteLog(_id)
+        print(err)
+    return json.dumps({'status': 'OK', 'idlist': idlist})
 
 @app.route('/content/<int:log_id>', methods=['GET'])
 def api_content(log_id):
@@ -269,7 +275,6 @@ def api_content(log_id):
         return log.content
     else:
         return err
-
 
 @app.route('/users')
 @login_required
@@ -294,8 +299,7 @@ def user_from_id(id):
         print('Error in getting log!')
         return err
 
-
-@app.route('/user', methods=['POST', 'DEL'])
+@app.route('/user', methods=['POST'])
 def api_user():
     conn, cur = dbhelper.getUserDb()
     logdb = LogDb(conn, cur)
@@ -330,11 +334,24 @@ def api_user():
             print(ex)
             return repr(ex)
 
+@app.route('/user/delete', methods=['POST'])
+@login_required
+def delete_user():
+    conn, cur = dbhelper.getUserDb()
+    logdb = LogDb(conn, cur)
+    id = request.form['id']
+    try:
+        logdb.deleteUserLog(id)
+        print('User log deleted : id=' + repr(id))
+        return None
+    except Exception as ex:
+        print('User log couldnt be deleted : id=' + id)
+        print(ex)
+        return repr(ex)
 
 @app.route('/lognormal')
 def api_log_normal():
     return "hello world"
-
 
 @app.route('/newversion', methods=['GET'])
 def new_version():
@@ -343,14 +360,12 @@ def new_version():
     versionsetting = settingdb.readSetting(config.NEW_VERSION_KEY)
     return versionsetting.value
 
-
 @app.route('/newversionurl', methods=['GET'])
 def new_version_url():
     conn, cur = dbhelper.getDb()
     settingdb = Settings(conn, cur)
     versionsetting = settingdb.readSetting(config.NEW_VERSION_URL_KEY)
     return versionsetting.value
-
 
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
@@ -374,7 +389,6 @@ def settings():
         else:
             return render_template('error.html', exception=err)
 
-
 @app.route('/setting/<int:id>', methods=['GET'])
 @login_required
 def setting(id):
@@ -386,7 +400,6 @@ def setting(id):
     print('id=' + str(setting.id))
     settingdict = {'key': setting.key, 'value': setting.value, 'id': setting.id}
     return json.dumps(settingdict)
-
 
 @app.route('/setting/delete', methods=['POST'])
 @login_required
@@ -401,11 +414,6 @@ def delete_setting():
     else:
         return render_template('error.html', exception=err)
 
-
-@app.route('/example')
-def example():
-    return render_template('example.html')
-
 @app.route('/reset')
 @login_required
 def reset():
@@ -413,13 +421,55 @@ def reset():
         dbhelper.resetDb()
         dbhelper.resetUserDb()
         dbhelper.resetSettingsDb()
+        dbhelper.resetDownloadsDb()
         conn, cur = dbhelper.getDb()
         logdb = LogDb(conn, cur)
         log, err = logdb.getLog(1)
 
         if err == None:
             return log.name
-        return "Database reset"
+        return "Databases have been reset"
+    except Exception as ex:
+        return "Database Error: " + repr(ex)
+
+@app.route('/reset/logs')
+@login_required
+def resetlogs():
+    try:
+        dbhelper.resetDb()
+        conn, cur = dbhelper.getDb()
+        logdb = LogDb(conn, cur)
+        log, err = logdb.getLog(1)
+        if err == None:
+            return log.name
+        return "Logs database has been reset"
+    except Exception as ex:
+        return "Database Error: " + repr(ex)
+
+@app.route('/reset/users')
+@login_required
+def resetusers():
+    try:
+        dbhelper.resetUserDb()
+        return "Users database has been reset"
+    except Exception as ex:
+        return "Database Error: " + repr(ex)
+
+@app.route('/reset/settings')
+@login_required
+def resetsettings():
+    try:
+        dbhelper.resetSettingsDb()
+        return "Settings database has been reset"
+    except Exception as ex:
+        return "Database Error: " + repr(ex)
+
+@app.route('/reset/downloads')
+@login_required
+def resetdownloads():
+    try:
+        dbhelper.resetDownloadsDb()
+        return "Downloads database has been reset"
     except Exception as ex:
         return "Database Error: " + repr(ex)
 

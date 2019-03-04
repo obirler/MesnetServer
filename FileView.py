@@ -1,4 +1,6 @@
 import os, time
+from builtins import round, str, float
+
 
 class FileView:
     def __init__(self, path):

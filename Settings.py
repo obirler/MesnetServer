@@ -1,3 +1,6 @@
+from builtins import Exception, repr, len
+
+
 class Setting:
     def __init__(self, key, value, id=None):
         self.key = key

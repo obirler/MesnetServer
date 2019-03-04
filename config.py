@@ -1,6 +1,6 @@
 DB_NAME = 'logs.db'
-USER_NAME = 'admin'
-PASSWORD = 'python'
+USER_NAME = 'omer'
+PASSWORD = 'password'
 USER_DB_NAME = 'users.db'
 NEW_VERSION_KEY = 'newversion'
 NEW_VERSION_URL_KEY = 'newversionurl'

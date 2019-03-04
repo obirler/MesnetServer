@@ -1,4 +1,6 @@
 import json
+from builtins import Exception, repr
+
 
 class Log:
     def __init__(self, username, appname, version, type, createdate, senddate, content, _id=None):

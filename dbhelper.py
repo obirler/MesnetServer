@@ -67,3 +67,15 @@ def resetSettingsDb():
                                      value TEXT)"""
     cur.execute(query)
     conn.commit()
+
+def resetDownloadsDb():
+    conn, cur = getDb()
+    # DROP TABLES
+    query = "DROP TABLE IF EXISTS downloads;"
+    cur.execute(query)
+    # CREATE TABLES
+    query = """CREATE TABLE downloads(id INTEGER PRIMARY KEY,
+                                     key TEXT NOT NULL UNIQUE,
+                                     value TEXT)"""
+    cur.execute(query)
+    conn.commit()
