@@ -9,9 +9,7 @@ The logger service will be used in the future in the applications below:
 
 **Mesnet3D**: A prospective Three-dimensional analyzer program that is also supposed to use Matrix Displacement Method but in three dimensional space. It is in concept design stage.
 
-The web service was written in Python Programming Language and developed by [Yusuf TEMİZ](https://bitbucket.org/mytemiz/) and [Ömer BİRLER](https://bitbucket.org/omerbirler/).
 
-![1.PNG](https://bitbucket.org/repo/badXxxy/images/2071556248-1.PNG)
 ![3.PNG](https://bitbucket.org/repo/badXxxy/images/2900477413-3.PNG)
 ![4.PNG](https://bitbucket.org/repo/badXxxy/images/1012128532-4.PNG)
 ![5.PNG](https://bitbucket.org/repo/badXxxy/images/331594969-5.PNG)
