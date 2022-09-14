@@ -12,7 +12,6 @@ The logger service will be used in the future in the applications below:
 The web service was written in Python Programming Language and developed by [Yusuf TEMİZ](https://bitbucket.org/mytemiz/) and [Ömer BİRLER](https://bitbucket.org/omerbirler/).
 
 ![1.PNG](https://bitbucket.org/repo/badXxxy/images/2071556248-1.PNG)
-![2.PNG](https://bitbucket.org/repo/badXxxy/images/3402557434-2.PNG)
 ![3.PNG](https://bitbucket.org/repo/badXxxy/images/2900477413-3.PNG)
 ![4.PNG](https://bitbucket.org/repo/badXxxy/images/1012128532-4.PNG)
 ![5.PNG](https://bitbucket.org/repo/badXxxy/images/331594969-5.PNG)
